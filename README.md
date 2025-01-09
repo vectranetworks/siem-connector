@@ -78,7 +78,49 @@ Users need to follow following steps to start the connector:
     └── cert/
         └── server1.pem
     ```
-5. Run command **'docker compose up -d'** to start the connector.
+5. In case you are using a proxy in your environment
+Create a folder to configure the Docker service through systemd:
+```
+mkdir /etc/systemd/system/docker.service.d
+```
+
+Create a service configuration file at /etc/systemd/system/docker.service.d/http-proxy.conf and put the following in the newly created file
+```
+[Service]
+ # NO_PROXY is optional and can be removed if not needed
+ # Change proxy_url to your proxy IP or FQDN and proxy_port to your proxy port
+ # For Proxy servers that require username and password authentication, just add the proper username and password to the URL. (see example below)
+
+ # Example without authentication
+ Environment="HTTP_PROXY=http://proxy_url:proxy_port/" "NO_PROXY=localhost,127.0.0.0/8"
+
+ # Example with authentication
+ Environment="HTTP_PROXY=http://username:password@proxy_url:proxy_port/" "NO_PROXY=localhost,127.0.0.0/8"
+
+ # Example for SOCKS5
+ Environment="HTTP_PROXY=socks5://proxy_url:proxy_port/" "NO_PROXY=localhost,127.0.0.0/8"
+ 
+```
+
+Reload systemctl to read the new settings:
+
+```
+sudo systemctl daemon-reload
+```
+
+Verify that the Docker service environment is properly set:
+
+```
+sudo systemctl show docker --property Environment
+```
+
+Restart the Docker service to use the updated environment settings
+
+```
+sudo systemctl restart docker
+```
+
+6. Run command **'docker compose up -d'** to start the connector.
 
 ## Note
 
