@@ -66,6 +66,7 @@ def get_data_from_detection():
     # TM-4540 - do not pull triaged detections
     params = {}
     params.update({"include_triaged": "false"})
+    params.update({"include_info_category": "true"})
     if not os.path.exists(checkpoint_file_path):
         current_time = datetime.utcnow()
         new_time = current_time - timedelta(hours=24)
