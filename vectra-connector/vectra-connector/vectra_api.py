@@ -175,7 +175,7 @@ class VectraAPI:
             params = {}
         params.update({"limit": 1000})
 
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {"Authorization": f"Bearer {access_token}","User-Agent": "VectraRUX-SIEM-Connect"}
         remaining_count = -1
         conf_data = read_config()
         while remaining_count != 0:
